@@ -1,0 +1,20 @@
+{% set options = salt['pillar.get']('prometheus:options') %}
+
+{%- if options.global is defined %}
+global:
+  scrape_interval: {{ options.global.scrape_interval | default('10s') }}
+  evaluation_interval: {{ options.global.evaluation_interval | default('10s') }}
+{% endif %}
+
+{%- if options.scrape_configs is defined %}
+scrape_configs:
+  {% if options.scrape_configs.consul is defined %}
+  - job_name: 'consul'
+    consul_sd_configs:
+      - server: {{ options.scrape_configs.consul.server }}
+        token: {{ options.scrape_configs.consul.token }}
+        services: {{ options.scrape_configs.consul.services }}
+
+{% include 'prometheus/files/config_consul_relabel' %}
+  {% endif %}
+{% endif %}

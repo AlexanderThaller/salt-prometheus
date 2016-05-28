@@ -1,0 +1,17 @@
+{% set lookup = salt['grains.filter_by'](
+  {
+    'FreeBSD': {
+      'tarball_name': 'prometheus-0.19.1.freebsd-amd64',
+      'bin_path': '/usr/local/bin',
+      'rc_path': '/usr/local/etc/rc.d',
+      'service': 'prometheus',
+      'prometheus_service_path': '/usr/local/etc/prometheus.d',
+      'opt_path': '/usr/local/share',
+      'etc_path': '/usr/local/etc',
+      'consul_service_path': '/usr/local/etc/consul.d',
+    },
+  },
+  grain='os_family',
+  merge=salt['pillar.get']('prometheus:lookup'),
+  default='unset'
+) %}

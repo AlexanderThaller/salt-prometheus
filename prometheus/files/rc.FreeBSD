@@ -1,0 +1,54 @@
+#!/bin/sh
+
+#
+# Prometheus startup script
+#
+# PROVIDE: prometheus
+# REQUIRE: DAEMON cleanvar
+# KEYWORD: shutdown
+
+# Add the following to /etc/rc.conf[.local] to enable this service
+#
+# prometheus_enable="YES"
+#
+
+. /etc/rc.subr
+
+name="prometheus"
+
+extra_commands="reload"
+start_precmd="${name}_startprecmd"
+
+rcvar="${name}_enable"
+
+load_rc_config ${name}
+: ${prometheus_enable:="NO"}
+: ${prometheus_user:="prometheus"}
+: ${prometheus_group:="prometheus"}
+: ${prometheus_log_file:="/var/log/${name}"}
+: ${prometheus_config_file:="/usr/local/etc/${name}"}
+: ${prometheus_storage_local_path:="/var/db/prometheus/data"}
+: ${prometheus_storage_local_retention:="360h0m0s"}
+
+pidfile="/var/run/${name}.pid"
+command="/usr/sbin/daemon"
+procname="${command}"
+actual_command="/usr/local/bin/${name}"
+command_args="-r -P ${pidfile} ${actual_command} -config.file '${prometheus_config_file}' -storage.local.path='${prometheus_storage_local_path}' -storage.local.retention='${prometheus_storage_local_retention}' -web.external-url=localhost:9090 > ${prometheus_log_file} 2>&1"
+
+prometheus_startprecmd()
+{
+        if [ ! -e ${pidfile} ]; then
+                install -o ${prometheus_user} -g ${prometheus_group} /dev/null ${pidfile};
+        fi
+
+        if [ ! -d ${prometheus_storage_local_path} ]; then
+                install -d -o ${prometheus_user} -g ${prometheus_group} ${prometheus_storage_local_path}
+        fi
+
+        if [ ! -e ${prometheus_log_file} ]; then
+                install -o ${prometheus_user} -g ${prometheus_group} /dev/null ${prometheus_log_file};
+        fi
+}
+
+run_rc_command "$1"

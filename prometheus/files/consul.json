@@ -1,0 +1,1 @@
+{"service": {"name": "prometheus", "tags": ["golang"], "port": 9090}}

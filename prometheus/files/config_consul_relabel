@@ -1,0 +1,41 @@
+    relabel_configs:
+    - source_labels: ['__meta_consul_service']
+      regex:         '(.*)'
+      target_label:  'job'
+      replacement:   '$1'
+    - source_labels: ['__meta_consul_tags']
+      regex:         '.*,jobname=(.*?),.*'
+      target_label:  'job'
+      replacement:   '$1'
+    - source_labels: ['__meta_consul_node']
+      regex:         '(.*)'
+      target_label:  'instance'
+      replacement:   '$1'
+    - source_labels: ['__meta_consul_tags']
+      regex:         '.*,Type=(.*?),.*'
+      target_label:  'purpose'
+      replacement:   '$1'
+    - source_labels: ['__meta_consul_tags']
+      regex:         '.*,Environment=(.*?),.*'
+      target_label:  'environment'
+      replacement:   '$1'
+    - source_labels: ['__meta_consul_tags']
+      regex:         '.*,instancetype=(.*?),.*'
+      target_label:  'instancetype'
+      replacement:   '$1'
+    - source_labels: ['__meta_consul_tags']
+      regex:         '.*,jmx_type=(.*?),.*'
+      target_label:  'jmx_monitored_application'
+      replacement:   '$1'
+    - source_labels: ['__meta_consul_tags']
+      regex:         '.*,jmx_type=(.*?),.*'
+      target_label:  'job'
+      replacement:   '$1'
+    - source_labels: ['__meta_consul_dc']
+      regex:         '(.*?)-(.*)'
+      target_label:  'vendor'
+      replacement:   '$1'
+    - source_labels: ['__meta_consul_dc']
+      regex:         '(.*?)-(.*)'
+      target_label:  'region'
+      replacement:   '$2'

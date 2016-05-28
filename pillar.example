@@ -1,0 +1,13 @@
+prometheus:
+  retention: '8760h'
+  options:
+    global:
+      scrape_interval: '10s'
+      evaluation_interval: '10s'
+    scrape_configs:
+      consul:
+        server: '10.0.0.1:8500'
+        token: 'TMtjOwsXtMN9Psi2FnbLEg=='
+        services:
+          - 'prometheus'
+          - 'consul_exporter'

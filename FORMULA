@@ -1,0 +1,7 @@
+name: prometheus
+version: 201605
+release: 1
+os: FreeBSD
+minimum_version: 2015.8
+summary: Formula for installing and managing prometheus
+description: Formula for installing and managing prometheus.
