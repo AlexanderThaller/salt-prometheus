@@ -22,7 +22,6 @@ prometheus.group:
   group.present:
     - name: 'prometheus'
     - system: True
-    - gid: '553'
 
 prometheus.user:
   user.present:
@@ -30,5 +29,3 @@ prometheus.user:
     - fullname: 'Prometheus Daemon'
     - home: '/var/db/prometheus'
     - shell: '/usr/sbin/nologin'
-    - uid: '553'
-    - gid: '553'
