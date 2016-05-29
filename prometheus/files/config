@@ -11,8 +11,11 @@ scrape_configs:
   {% if options.scrape_configs.consul is defined %}
   - job_name: 'consul'
     consul_sd_configs:
-      - server: {{ options.scrape_configs.consul.server }}
-        token: {{ options.scrape_configs.consul.token }}
+        {%- set port = options.scrape_configs.consul.port | default('8500') %}
+        {%- set server = options.scrape_configs.consul.server | default(salt['pillar.get']('consul:start_join')[0]) %}
+      - server: {{ server }}:{{ port }}
+        {%- set token = options.scrape_configs.consul.token | default(salt['pillar.get']('consul:encrypt')) %}
+        token: {{ token }}
         services: {{ options.scrape_configs.consul.services }}
 
 {% include 'prometheus/files/config_consul_relabel' %}
